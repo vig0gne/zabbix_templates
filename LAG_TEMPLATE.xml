@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.4</version>
-    <date>2021-04-15T06:00:42Z</date>
+    <date>2021-04-20T05:39:17Z</date>
     <groups>
         <group>
             <name>Templates_Cisco</name>
@@ -83,7 +83,7 @@
                             </applications>
                             <trigger_prototypes>
                                 <trigger_prototype>
-                                    <expression>{str(BC)}=0</expression>
+                                    <expression>({str(BC)}=0 and {str(FC)}=0)</expression>
                                     <name>{HOST.NAME} Port-channel{#SNMPVALUE} bundle problem</name>
                                     <priority>AVERAGE</priority>
                                     <description>Interface {#IFNAME} a member of Port-channel{#SNMPVALUE} have some problems.&#13;
@@ -162,7 +162,7 @@ Description {#IFALIAS}</description>
                             <type>SNMPV2</type>
                             <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
                             <snmp_oid>IF-MIB::ifHCInOctets.{#SNMPINDEX}</snmp_oid>
-                            <key>if.in.[{#POINDEX}]</key>
+                            <key>if.po[{#POINDEX}.in]</key>
                             <units>bps</units>
                             <port>161</port>
                             <applications>
@@ -186,7 +186,7 @@ Description {#IFALIAS}</description>
                             <type>SNMPV2</type>
                             <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
                             <snmp_oid>IF-MIB::ifHCOutOctets.{#SNMPINDEX}</snmp_oid>
-                            <key>if.out.[{#POINDEX}]</key>
+                            <key>if.po[{#POINDEX}.out]</key>
                             <units>bps</units>
                             <port>161</port>
                             <applications>
@@ -215,7 +215,7 @@ Description {#IFALIAS}</description>
                                     <yaxisside>RIGHT</yaxisside>
                                     <item>
                                         <host>Template_Cisco_LAG</host>
-                                        <key>if.in.[{#POINDEX}]</key>
+                                        <key>if.po[{#POINDEX}.in]</key>
                                     </item>
                                 </graph_item>
                                 <graph_item>
@@ -224,7 +224,7 @@ Description {#IFALIAS}</description>
                                     <yaxisside>RIGHT</yaxisside>
                                     <item>
                                         <host>Template_Cisco_LAG</host>
-                                        <key>if.out.[{#POINDEX}]</key>
+                                        <key>if.po[{#POINDEX}.out]</key>
                                     </item>
                                 </graph_item>
                             </graph_items>
