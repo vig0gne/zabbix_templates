@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>4.4</version>
+    <date>2022-06-17T11:25:42Z</date>
+    <groups>
+        <group>
+            <name>Cisco LAP</name>
+        </group>
+        <group>
+            <name>Templates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Template Cisco WLC</template>
+            <name>Template Cisco WLC</name>
+            <groups>
+                <group>
+                    <name>Templates</name>
+                </group>
+            </groups>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>AP Discovery</name>
+                    <type>SNMPV2</type>
+                    <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
+                    <snmp_oid>discovery[{#AP_NAME},bsnAPName,{#AP_GROUP},bsnAPGroupVlanName]</snmp_oid>
+                    <key>bsnAPName</key>
+                    <delay>1h</delay>
+                    <host_prototypes>
+                        <host_prototype>
+                            <host>{#AP_NAME}</host>
+                            <name>{#AP_NAME}</name>
+                            <group_links>
+                                <group_link>
+                                    <group>
+                                        <name>Cisco LAP</name>
+                                    </group>
+                                </group_link>
+                            </group_links>
+                            <group_prototypes>
+                                <group_prototype>
+                                    <name>Cisco LAP/{#AP_GROUP}</name>
+                                </group_prototype>
+                            </group_prototypes>
+                            <templates>
+                                <template>
+                                    <name>Template Cisco LAP</name>
+                                </template>
+                            </templates>
+                        </host_prototype>
+                    </host_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+        </template>
+    </templates>
+</zabbix_export>
