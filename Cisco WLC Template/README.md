@@ -55,8 +55,8 @@ AP Interference Channel 2.4GHz Utilization High	{Template Cisco LAP:ap_chan_para
 AP Interference Channel 5GHz Utilization High	{Template Cisco LAP:ap_chan_param.py["{HOST.CONN}","{#SNMPINDEX}","InterferenceUtil5","{$SNMP_COMMUNITY}"].last(#3)}>40
 AP is unreachable				{Template Cisco LAP:icmpping[{#AP_IPADDR}].max(300)}<1
 AP just been restarted				{Template Cisco LAP:cLApUpTime[{#AP_NAME}].last()}<600
-AP Load Channel 2.4GHz Utilization High	{Template Cisco LAP:dot11LoadChanUtil24[{#AP_NAME}].last(#3)}>80
-AP Load Channel 5GHz Utilization High	{Template Cisco LAP:dot11LoadChanUtil5[{#AP_NAME}].last(#3)}>80
+AP Load Channel 2.4GHz Utilization High		{Template Cisco LAP:dot11LoadChanUtil24[{#AP_NAME}].last(#3)}>80
+AP Load Channel 5GHz Utilization High		{Template Cisco LAP:dot11LoadChanUtil5[{#AP_NAME}].last(#3)}>80
 AP Memory HIGH					{Template Cisco LAP:MemoryUsage[{#AP_NAME}].last(#3)}>85
 AP Noise on Channel 2.4GHz is High		{Template Cisco LAP:ap_chan_param.py["{HOST.CONN}","{#SNMPINDEX}","NoisePower24","{$SNMP_COMMUNITY}"].last()}>-80
 AP Noise on Channel 5GHz is High		{Template Cisco LAP:ap_chan_param.py["{HOST.CONN}","{#SNMPINDEX}","NoisePower5","{$SNMP_COMMUNITY}"].last()}>-80
