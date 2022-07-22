@@ -5,6 +5,8 @@
 :param arg[3] - Case
 :param arg[4] - SNMP Community
 """
+import os
+os.environ['MIBS']='AIRESPACE-WIRELESS-MIB'
 
 from snmp_cmds import *
 import sys
