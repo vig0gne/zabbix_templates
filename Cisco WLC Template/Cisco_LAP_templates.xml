@@ -51,7 +51,7 @@
                             </condition>
                         </conditions>
                     </filter>
-                    <lifetime>1d</lifetime>
+                    <lifetime>2678400</lifetime>
                     <item_prototypes>
                         <item_prototype>
                             <name>AP Interference Channel Utilization 5GHz</name>
