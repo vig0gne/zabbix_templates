@@ -7,7 +7,7 @@ Template for automatic discovery LAPs, creation of host prototypes and assigning
 It is template assigned to WLC.
 
 Required MIBs: 
-[CISCO-LWAPP-AP-MIB](https://circitor.fr/Mibs/Html/C/CISCO-LWAPP-AP-MIB.php) & [AIRESPACE-WIRELESS-MIB](http://www.circitor.fr/Mibs/Html/A/AIRESPACE-WIRELESS-MIB.php)
+[CISCO-LWAPP-AP-MIB](https://circitor.fr/Mibs/Html/C/CISCO-LWAPP-AP-MIB.php) & [CISCO-LWAPP-AP-EXT-MIB](https://www.circitor.fr/Mibs/Html/C/CISCO-LWAPP-EXT-MIB.php) & [AIRESPACE-WIRELESS-MIB](http://www.circitor.fr/Mibs/Html/A/AIRESPACE-WIRELESS-MIB.php)
 
 It has one Discovery Rule with two macroses:
 ```
