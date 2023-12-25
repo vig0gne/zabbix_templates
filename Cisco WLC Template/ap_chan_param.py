@@ -12,8 +12,7 @@ from snmp_cmds import *
 import sys
 
 os.environ['MIBS'] = 'AIRESPACE-WIRELESS-MIB'
-# args = sys.argv
-args = ['test', '10.45.200.200', '112.107.185.129.146.224', 'NoisePower5', 'NfRcBrJvV']
+args = sys.argv
 query = Session(ipaddress=args[1], read_community=args[4], timeout=10)
 interferencemib = 'AIRESPACE-WIRELESS-MIB::bsnAPIfInterferenceUtilization.'
 noisemib = 'AIRESPACE-WIRELESS-MIB::bsnAPIfDBNoisePower.'
