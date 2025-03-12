@@ -13,7 +13,13 @@ It has one Discovery Rule with two macroses:
 ```
 discovery[{#AP_NAME},bsnAPName,{#AP_GROUP},bsnAPGroupVlanName]
 ```
+Filtered with filter rule so that only already configured access points get in. 
+*Change it for your filter*
+```
+{#AP_NAME}    matches     ^\w{2}-.+$
+```
 And creates the Host Prototypes:
+*I've one group only, but you can use different*
 ```
 Host name: {#AP_NAME}
 Groups: 'Cisco LAP'
@@ -28,9 +34,15 @@ discovery[{#AP_NAME},bsnAPName,{#AP_IPADDR},bsnApIpAddress]
 ```
 but it has one filter rule:
 ```
-{#AP_NAME}      matches     ^{HOST.HOST}$
+{#AP_IPADDR}    don't match  0.0.0.0
+{#AP_NAME}      matches      ^{HOST.HOST}$
 ```
-and creates next item prototypes:
+and creates next two master items:
+```
+**AP Channel Info (Master)**
+**AP Hw Resources (Master)**
+```
+and next dependent items:
 ```
 AP Channel 2.4GHz
 AP Channel 5GHz
@@ -46,27 +58,30 @@ AP Noise Power 2.4GHz
 AP Noise Power 5GHz
 AP Operational Status 2.4GHz
 AP Operational Status 5GHz
-AP Ping
 AP Receive Bytes 2.4GHz
 AP Receive Bytes 5GHz
 AP Transmit Bytes 2.4GHz
 AP Transmit Bytes 5GHz
 ```
+and just simple check item:
+```
+AP Ping
+```
 and next trigger prototypes:
 ```
-AP CPU Load					{Template Cisco LAP:CPUUsage[{#AP_NAME}].last(#3)}>85
-AP Interference Channel 2.4GHz Utilization High	{Template Cisco LAP:ap_chan_param.py["{HOST.CONN}","{#SNMPINDEX}","InterferenceUtil24","{$SNMP_COMMUNITY}"].last(#3)}>40
-AP Interference Channel 5GHz Utilization High	{Template Cisco LAP:ap_chan_param.py["{HOST.CONN}","{#SNMPINDEX}","InterferenceUtil5","{$SNMP_COMMUNITY}"].last(#3)}>40
-AP is unreachable				{Template Cisco LAP:icmpping[{#AP_IPADDR}].max(300)}<1
-AP just been restarted				{Template Cisco LAP:cLApUpTime[{#AP_NAME}].last()}<600
-AP Load Channel 2.4GHz Utilization High		{Template Cisco LAP:dot11LoadChanUtil24[{#AP_NAME}].last(#3)}>80
-AP Load Channel 5GHz Utilization High		{Template Cisco LAP:dot11LoadChanUtil5[{#AP_NAME}].last(#3)}>80
-AP Memory HIGH					{Template Cisco LAP:MemoryUsage[{#AP_NAME}].last(#3)}>85
-AP Noise on Channel 2.4GHz is High		{Template Cisco LAP:ap_chan_param.py["{HOST.CONN}","{#SNMPINDEX}","NoisePower24","{$SNMP_COMMUNITY}"].last()}>-80
-AP Noise on Channel 5GHz is High		{Template Cisco LAP:ap_chan_param.py["{HOST.CONN}","{#SNMPINDEX}","NoisePower5","{$SNMP_COMMUNITY}"].last()}>-80
-MAX Clients					{Template Cisco LAP:ClientCount[{#AP_NAME}].last()}>150
-Radio Interface 2.4 GHz is DOWN			{Template Cisco LAP:dot11OperStatus24[{#AP_NAME}].last()}=2
-Radio Interface 5 GHz is DOWN			{Template Cisco LAP:dot11OperStatus5[{#AP_NAME}].last()}=2
+AP CPU Load					                    last(/Template Cisco LAP/CPUUsage[{#AP_NAME}])>85
+AP Interference Channel 2.4GHz Utilization High	min(/Template Cisco LAP/dot11ChanInterference2G.[{#AP_NAME}],600s)>40
+AP Interference Channel 5GHz Utilization High	min(/Template Cisco LAP/dot11ChanInterference5G.[{#AP_NAME}],600s)>40
+AP is unreachable				                max(/Template Cisco LAP/icmpping[{#AP_IPADDR}],300s)<1
+AP just been rejoined				            last(/Template Cisco LAP/cLApUpTime[{#AP_NAME}])<600
+AP Load Channel 2.4GHz Utilization High		    min(/Template Cisco LAP/dot11LoadChanUtil24[{#AP_NAME}],600s)>80
+AP Load Channel 5GHz Utilization High		    min(/Template Cisco LAP/dot11LoadChanUtil5[{#AP_NAME}],600s)>80
+AP Memory HIGH					                avg(/Template Cisco LAP/MemoryUsage[{#AP_NAME}],#3)>85
+AP Noise on Channel 2.4GHz is High		        min(/Template Cisco LAP/dot11ChanNoise2G.[{#AP_NAME}],300s)>-80
+AP Noise on Channel 5GHz is High		        min(/Template Cisco LAP/dot11ChanNoise5G.[{#AP_NAME}],300s)>-80
+MAX Clients					                    last(/Template Cisco LAP/ClientCount[{#AP_NAME}])>25
+Radio Interface 2.4 GHz is DOWN			        last(/Template Cisco LAP/dot11OperStatus24[{#AP_NAME}])<>1
+Radio Interface 5 GHz is DOWN			        last(/Template Cisco LAP/dot11OperStatus5[{#AP_NAME}])<>1
 ```
 and next graph prototypes:
 ```
@@ -77,7 +92,3 @@ and next graph prototypes:
 {#AP_NAME} Noise Power
 {#AP_NAME} Traffic on Radio Modules
 ```
-
-### ap_chan_param.py
-It is an external script that gets some parameters needed only on the working channel of the access point _(such as **Noise Power** or **Interference Channel Utilization**)_.
-It must be placed in the external scripts directory *(usually /usr/lib/zabbix/externalscripts/)*

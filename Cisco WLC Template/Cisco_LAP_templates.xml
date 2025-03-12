@@ -1,37 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
-    <version>4.4</version>
-    <date>2022-07-22T05:01:08Z</date>
-    <groups>
-        <group>
-            <name>Templates_Cisco</name>
-        </group>
-    </groups>
+    <version>7.0</version>
+    <template_groups>
+        <template_group>
+            <uuid>36bff6c29af64692839d077febfc7079</uuid>
+            <name>Templates/Network devices</name>
+        </template_group>
+    </template_groups>
     <templates>
         <template>
+            <uuid>690abfd2f8e145bba4a5899c72b3b9aa</uuid>
             <template>Template Cisco LAP</template>
             <name>Template Cisco LAP</name>
             <groups>
                 <group>
-                    <name>Templates_Cisco</name>
+                    <name>Templates/Network devices</name>
                 </group>
             </groups>
-            <applications>
-                <application>
-                    <name>Availability</name>
-                </application>
-                <application>
-                    <name>Radio Resource</name>
-                </application>
-                <application>
-                    <name>Resources</name>
-                </application>
-            </applications>
             <discovery_rules>
                 <discovery_rule>
+                    <uuid>8728de537ec14b07b8e674b7ad27f6f1</uuid>
                     <name>AP Discovery</name>
-                    <type>SNMPV2</type>
-                    <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
+                    <type>SNMP_AGENT</type>
                     <snmp_oid>discovery[{#AP_NAME},bsnAPName,{#AP_IPADDR},bsnApIpAddress]</snmp_oid>
                     <key>bsnAPName</key>
                     <delay>1h;2m/1-7,00:00-24:00</delay>
@@ -52,433 +42,774 @@
                         </conditions>
                     </filter>
                     <lifetime>2678400</lifetime>
+                    <enabled_lifetime_type>DISABLE_NEVER</enabled_lifetime_type>
                     <item_prototypes>
                         <item_prototype>
-                            <name>AP Interference Channel Utilization 5GHz</name>
-                            <type>EXTERNAL</type>
-                            <key>ap_chan_param.py[&quot;{HOST.CONN}&quot;,&quot;{#SNMPINDEX}&quot;,&quot;InterferenceUtil5&quot;,&quot;{$SNMP_COMMUNITY}&quot;]</key>
-                            <delay>2m</delay>
-                            <units>%</units>
-                            <applications>
-                                <application>
-                                    <name>Radio Resource</name>
-                                </application>
-                            </applications>
-                            <trigger_prototypes>
-                                <trigger_prototype>
-                                    <expression>{last(#3)}&gt;40</expression>
-                                    <name>AP Interference Channel 5GHz Utilization High</name>
-                                    <priority>WARNING</priority>
-                                    <dependencies>
-                                        <dependency>
-                                            <name>AP Load Channel 2.4GHz Utilization High</name>
-                                            <expression>{Template Cisco LAP:dot11LoadChanUtil24[{#AP_NAME}].last(#3)}&gt;80</expression>
-                                        </dependency>
-                                    </dependencies>
-                                </trigger_prototype>
-                            </trigger_prototypes>
-                        </item_prototype>
-                        <item_prototype>
-                            <name>AP Interference Channel Utilization 2.4GHz</name>
-                            <type>EXTERNAL</type>
-                            <key>ap_chan_param.py[&quot;{HOST.CONN}&quot;,&quot;{#SNMPINDEX}&quot;,&quot;InterferenceUtil24&quot;,&quot;{$SNMP_COMMUNITY}&quot;]</key>
-                            <delay>2m</delay>
-                            <units>%</units>
-                            <applications>
-                                <application>
-                                    <name>Radio Resource</name>
-                                </application>
-                            </applications>
-                            <trigger_prototypes>
-                                <trigger_prototype>
-                                    <expression>{last(#3)}&gt;40</expression>
-                                    <name>AP Interference Channel 2.4GHz Utilization High</name>
-                                    <priority>WARNING</priority>
-                                    <dependencies>
-                                        <dependency>
-                                            <name>AP Load Channel 2.4GHz Utilization High</name>
-                                            <expression>{Template Cisco LAP:dot11LoadChanUtil24[{#AP_NAME}].last(#3)}&gt;80</expression>
-                                        </dependency>
-                                    </dependencies>
-                                </trigger_prototype>
-                            </trigger_prototypes>
-                        </item_prototype>
-                        <item_prototype>
-                            <name>AP Noise Power 5GHz</name>
-                            <type>EXTERNAL</type>
-                            <key>ap_chan_param.py[&quot;{HOST.CONN}&quot;,&quot;{#SNMPINDEX}&quot;,&quot;NoisePower5&quot;,&quot;{$SNMP_COMMUNITY}&quot;]</key>
-                            <delay>2m</delay>
-                            <value_type>FLOAT</value_type>
-                            <units>dB</units>
-                            <applications>
-                                <application>
-                                    <name>Radio Resource</name>
-                                </application>
-                            </applications>
-                            <trigger_prototypes>
-                                <trigger_prototype>
-                                    <expression>{last()}&gt;-80</expression>
-                                    <name>AP Noise on Channel 5GHz is High</name>
-                                    <priority>WARNING</priority>
-                                    <dependencies>
-                                        <dependency>
-                                            <name>AP Load Channel 2.4GHz Utilization High</name>
-                                            <expression>{Template Cisco LAP:dot11LoadChanUtil24[{#AP_NAME}].last(#3)}&gt;80</expression>
-                                        </dependency>
-                                    </dependencies>
-                                </trigger_prototype>
-                            </trigger_prototypes>
-                        </item_prototype>
-                        <item_prototype>
-                            <name>AP Noise Power 2.4GHz</name>
-                            <type>EXTERNAL</type>
-                            <key>ap_chan_param.py[&quot;{HOST.CONN}&quot;,&quot;{#SNMPINDEX}&quot;,&quot;NoisePower24&quot;,&quot;{$SNMP_COMMUNITY}&quot;]</key>
-                            <delay>2m</delay>
-                            <value_type>FLOAT</value_type>
-                            <units>dB</units>
-                            <applications>
-                                <application>
-                                    <name>Radio Resource</name>
-                                </application>
-                            </applications>
-                            <trigger_prototypes>
-                                <trigger_prototype>
-                                    <expression>{last()}&gt;-80</expression>
-                                    <name>AP Noise on Channel 2.4GHz is High</name>
-                                    <priority>WARNING</priority>
-                                    <dependencies>
-                                        <dependency>
-                                            <name>AP Load Channel 2.4GHz Utilization High</name>
-                                            <expression>{Template Cisco LAP:dot11LoadChanUtil24[{#AP_NAME}].last(#3)}&gt;80</expression>
-                                        </dependency>
-                                    </dependencies>
-                                </trigger_prototype>
-                            </trigger_prototypes>
-                        </item_prototype>
-                        <item_prototype>
+                            <uuid>9b45d6f123ee48daba7b5383c966e801</uuid>
                             <name>AP Joined Time</name>
-                            <type>SNMPV2</type>
-                            <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                            <snmp_oid>CISCO-LWAPP-AP-MIB::cLLwappUpTime.{#SNMPINDEX}</snmp_oid>
+                            <type>DEPENDENT</type>
                             <key>cLApUpTime[{#AP_NAME}]</key>
-                            <delay>5m</delay>
+                            <delay>0</delay>
                             <units>s</units>
-                            <applications>
-                                <application>
-                                    <name>Availability</name>
-                                </application>
-                            </applications>
                             <preprocessing>
                                 <step>
+                                    <type>SNMP_WALK_VALUE</type>
+                                    <parameters>
+                                        <parameter>.1.3.6.1.4.1.9.9.513.1.1.1.1.7.{#SNMPINDEX}</parameter>
+                                        <parameter>0</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
                                     <type>MULTIPLIER</type>
-                                    <params>0.01</params>
+                                    <parameters>
+                                        <parameter>0.01</parameter>
+                                    </parameters>
                                 </step>
                             </preprocessing>
+                            <master_item>
+                                <key>PhyRes.walk.[{#AP_NAME}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Availability</value>
+                                </tag>
+                            </tags>
                             <trigger_prototypes>
                                 <trigger_prototype>
-                                    <expression>{last()}&lt;600</expression>
-                                    <name>AP just been restarted</name>
-                                    <priority>AVERAGE</priority>
+                                    <uuid>166e0498bf8d457b8a5fdbb7a8f68dd3</uuid>
+                                    <expression>last(/Template Cisco LAP/cLApUpTime[{#AP_NAME}])&lt;600</expression>
+                                    <name>AP just been rejoined</name>
+                                    <priority>WARNING</priority>
                                     <manual_close>YES</manual_close>
                                 </trigger_prototype>
                             </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>d38f782695c24328942408d4682213a6</uuid>
                             <name>AP Client Count</name>
-                            <type>SNMPV2</type>
-                            <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                            <snmp_oid>CISCO-LWAPP-AP-MIB::cLApAssociatedClientCount.{#SNMPINDEX}</snmp_oid>
+                            <type>DEPENDENT</type>
                             <key>ClientCount[{#AP_NAME}]</key>
-                            <delay>2m</delay>
-                            <port>161</port>
-                            <applications>
-                                <application>
-                                    <name>Radio Resource</name>
-                                </application>
-                            </applications>
+                            <delay>0</delay>
+                            <preprocessing>
+                                <step>
+                                    <type>SNMP_WALK_VALUE</type>
+                                    <parameters>
+                                        <parameter>.1.3.6.1.4.1.9.9.513.1.1.1.1.54.{#SNMPINDEX}</parameter>
+                                        <parameter>0</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>dot11Chan.walk.[{#AP_NAME}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Radio Resource</value>
+                                </tag>
+                            </tags>
                             <trigger_prototypes>
                                 <trigger_prototype>
-                                    <expression>{last()}&gt;150</expression>
+                                    <uuid>022e9b14c825446585fed0b60f8e39c9</uuid>
+                                    <expression>last(/Template Cisco LAP/ClientCount[{#AP_NAME}])&gt;25</expression>
                                     <name>MAX Clients</name>
                                     <priority>HIGH</priority>
                                 </trigger_prototype>
                             </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>55b23ac35a7e45f680c1bb6cd5e5fe2e</uuid>
                             <name>AP CPU Usage</name>
-                            <type>SNMPV2</type>
-                            <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                            <snmp_oid>CISCO-LWAPP-AP-MIB::cLApCpuCurrentUsage.{#SNMPINDEX}</snmp_oid>
+                            <type>DEPENDENT</type>
                             <key>CPUUsage[{#AP_NAME}]</key>
-                            <delay>2m</delay>
+                            <delay>0</delay>
                             <units>%</units>
-                            <port>161</port>
-                            <applications>
-                                <application>
-                                    <name>Resources</name>
-                                </application>
-                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>SNMP_WALK_VALUE</type>
+                                    <parameters>
+                                        <parameter>.1.3.6.1.4.1.9.9.513.1.1.1.1.57.{#SNMPINDEX}</parameter>
+                                        <parameter>0</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>PhyRes.walk.[{#AP_NAME}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Resources</value>
+                                </tag>
+                            </tags>
                             <trigger_prototypes>
                                 <trigger_prototype>
-                                    <expression>{last()}&gt;85</expression>
+                                    <uuid>33eb9b118c014b97b9302d82234b3979</uuid>
+                                    <expression>last(/Template Cisco LAP/CPUUsage[{#AP_NAME}])&gt;85</expression>
                                     <name>AP CPU Load</name>
                                     <priority>AVERAGE</priority>
                                 </trigger_prototype>
                             </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
-                            <name>AP Channel 5GHz</name>
-                            <type>SNMPV2</type>
-                            <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                            <snmp_oid>AIRESPACE-WIRELESS-MIB::bsnAPIfPhyChannelNumber.{#SNMPINDEX}.1</snmp_oid>
-                            <key>dot11Chan5[{#AP_NAME}]</key>
-                            <delay>1h</delay>
-                            <units>chan</units>
-                            <port>161</port>
-                            <applications>
-                                <application>
-                                    <name>Radio Resource</name>
-                                </application>
-                            </applications>
-                        </item_prototype>
-                        <item_prototype>
-                            <name>AP Channel 2.4GHz</name>
-                            <type>SNMPV2</type>
-                            <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                            <snmp_oid>AIRESPACE-WIRELESS-MIB::bsnAPIfPhyChannelNumber.{#SNMPINDEX}.0</snmp_oid>
-                            <key>dot11Chan24[{#AP_NAME}]</key>
-                            <delay>1h</delay>
-                            <units>chan</units>
-                            <port>161</port>
-                            <applications>
-                                <application>
-                                    <name>Radio Resource</name>
-                                </application>
-                            </applications>
-                        </item_prototype>
-                        <item_prototype>
-                            <name>AP Load Channel Utilization 5GHz</name>
-                            <type>SNMPV2</type>
-                            <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                            <snmp_oid>AIRESPACE-WIRELESS-MIB::bsnAPIfLoadChannelUtilization.{#SNMPINDEX}.1</snmp_oid>
-                            <key>dot11LoadChanUtil5[{#AP_NAME}]</key>
+                            <uuid>402db11b44c84f22a286e8374016102d</uuid>
+                            <name>AP Channel Info (Master)</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>walk[.1.3.6.1.4.1.14179.2.2.2.1.4.{#SNMPINDEX}, .1.3.6.1.4.1.14179.2.2.14.1.22.{#SNMPINDEX}, .1.3.6.1.4.1.14179.2.2.15.1.21.{#SNMPINDEX}, .1.3.6.1.4.1.9.9.513.1.1.1.1.54.{#SNMPINDEX}, .1.3.6.1.4.1.14179.2.2.13.1.3.{#SNMPINDEX}, .1.3.6.1.4.1.9.9.9998.1.1.3.2.1.8.{#SNMPINDEX}, .1.3.6.1.4.1.9.9.9998.1.1.3.2.1.4.{#SNMPINDEX}, .1.3.6.1.4.1.9.9.9998.1.1.3.2.1.5.{#SNMPINDEX}]</snmp_oid>
+                            <key>dot11Chan.walk.[{#AP_NAME}]</key>
                             <delay>2m</delay>
+                            <value_type>TEXT</value_type>
+                            <trends>0</trends>
+                            <description>Active channel number
+AIRESPACE-WIRELESS-MIB::bsnAPIfPhyChannelNumber.{#SNMPINDEX},
+
+Interference Utilization
+AIRESPACE-WIRELESS-MIB::bsnAPIfInterferenceUtilization.{#SNMPINDEX},
+
+Noise Power
+AIRESPACE-WIRELESS-MIB::bsnAPIfDBNoisePower.{#SNMPINDEX},
+
+Associated Client Count
+CISCO-LWAPP-AP-MIB::cLApAssociatedClientCount.{#SNMPINDEX},
+
+Load Channel Utilization
+AIRESPACE-WIRELESS-MIB::bsnAPIfLoadChannelUtilization.{#SNMPINDEX}
+
+AP .11 IF Operational status
+CISCO-LWAPP-AP-EXT-MIB::clExtApDot11IfOperStatus.{#SNMPINDEX}
+
+AP Receive Bytes Count
+CISCO-LWAPP-AP-EXT-MIB::clExtApDot11RadioStatsRxByteCount.{#SNMPINDEX}
+
+AP Transceive Bytes Count
+CISCO-LWAPP-AP-EXT-MIB::clExtApDot11RadioStatsTxByteCount.{#SNMPINDEX}</description>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Radio Resource</value>
+                                </tag>
+                                <tag>
+                                    <tag>Master Item</tag>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>1d70d4883e69469a845c78a768fdda49</uuid>
+                            <name>AP Channel 5GHz</name>
+                            <type>DEPENDENT</type>
+                            <key>dot11Chan5[{#AP_NAME}]</key>
+                            <delay>0</delay>
+                            <units>chan</units>
+                            <preprocessing>
+                                <step>
+                                    <type>SNMP_WALK_VALUE</type>
+                                    <parameters>
+                                        <parameter>.1.3.6.1.4.1.14179.2.2.2.1.4.{#SNMPINDEX}.1</parameter>
+                                        <parameter>0</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <parameters>
+                                        <parameter>30m</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>dot11Chan.walk.[{#AP_NAME}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Radio Resource</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>df61ddf6aefb46dcb9378e3feabf2e1d</uuid>
+                            <name>AP Channel 2.4GHz</name>
+                            <type>DEPENDENT</type>
+                            <key>dot11Chan24[{#AP_NAME}]</key>
+                            <delay>0</delay>
+                            <units>chan</units>
+                            <preprocessing>
+                                <step>
+                                    <type>SNMP_WALK_VALUE</type>
+                                    <parameters>
+                                        <parameter>.1.3.6.1.4.1.14179.2.2.2.1.4.{#SNMPINDEX}.0</parameter>
+                                        <parameter>0</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <parameters>
+                                        <parameter>30m</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>dot11Chan.walk.[{#AP_NAME}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Radio Resource</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>dcc644bcc1fe4c369a42e4ddf0ff74b6</uuid>
+                            <name>AP Interference Channel Utilization 2.4GHz</name>
+                            <type>DEPENDENT</type>
+                            <key>dot11ChanInterference2G.[{#AP_NAME}]</key>
+                            <delay>0</delay>
                             <units>%</units>
-                            <port>161</port>
-                            <applications>
-                                <application>
-                                    <name>Radio Resource</name>
-                                </application>
-                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>JAVASCRIPT</type>
+                                    <parameters>
+                                        <parameter>data=value.split('\n')
+var channel=null
+var result=null
+for (i=0;i&lt;data.length;i++){
+ items=data[i].split(' ')
+ if (items[0]=='.1.3.6.1.4.1.14179.2.2.2.1.4.{#SNMPINDEX}.0'){
+  channel=items[3]
+  break
+ }
+}
+for (i=0;i&lt;data.length;i++){
+ items=data[i].split(' ')
+ if (items[0]=='.1.3.6.1.4.1.14179.2.2.14.1.22.{#SNMPINDEX}.0.'+channel){
+  result=items[3]
+  break
+ }
+}
+return result</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>dot11Chan.walk.[{#AP_NAME}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Radio Resource</value>
+                                </tag>
+                            </tags>
                             <trigger_prototypes>
                                 <trigger_prototype>
-                                    <expression>{last(#3)}&gt;80</expression>
+                                    <uuid>04a85af6ff5e4c73994a443f8190bf8d</uuid>
+                                    <expression>min(/Template Cisco LAP/dot11ChanInterference2G.[{#AP_NAME}],600s)&gt;40</expression>
+                                    <name>AP Interference Channel 2.4GHz Utilization High</name>
+                                    <priority>WARNING</priority>
+                                    <dependencies>
+                                        <dependency>
+                                            <name>AP Load Channel 2.4GHz Utilization High</name>
+                                            <expression>min(/Template Cisco LAP/dot11LoadChanUtil24[{#AP_NAME}],600s)&gt;80</expression>
+                                        </dependency>
+                                    </dependencies>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>c20a517489c1403da4eb808d4b7870a3</uuid>
+                            <name>AP Interference Channel Utilization 5GHz</name>
+                            <type>DEPENDENT</type>
+                            <key>dot11ChanInterference5G.[{#AP_NAME}]</key>
+                            <delay>0</delay>
+                            <units>%</units>
+                            <preprocessing>
+                                <step>
+                                    <type>JAVASCRIPT</type>
+                                    <parameters>
+                                        <parameter>data=value.split('\n')
+var channel=null
+var result=null
+for (i=0;i&lt;data.length;i++){
+ items=data[i].split(' ')
+ if (items[0]=='.1.3.6.1.4.1.14179.2.2.2.1.4.{#SNMPINDEX}.1'){
+  channel=items[3]
+  break
+ }
+}
+for (i=0;i&lt;data.length;i++){
+ items=data[i].split(' ')
+ if (items[0]=='.1.3.6.1.4.1.14179.2.2.14.1.22.{#SNMPINDEX}.1.'+channel){
+  result=items[3]
+  break
+ }
+}
+return result</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>dot11Chan.walk.[{#AP_NAME}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Radio Resource</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>91bd5828218f4ff58039673e5d45ad46</uuid>
+                                    <expression>min(/Template Cisco LAP/dot11ChanInterference5G.[{#AP_NAME}],600s)&gt;40</expression>
+                                    <name>AP Interference Channel 5GHz Utilization High</name>
+                                    <priority>WARNING</priority>
+                                    <dependencies>
+                                        <dependency>
+                                            <name>AP Load Channel 5GHz Utilization High</name>
+                                            <expression>min(/Template Cisco LAP/dot11LoadChanUtil5[{#AP_NAME}],600s)&gt;80</expression>
+                                        </dependency>
+                                    </dependencies>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>f0b8b05f16984052b6efecd6a0d943f0</uuid>
+                            <name>AP Noise Power 2.4GHz</name>
+                            <type>DEPENDENT</type>
+                            <key>dot11ChanNoise2G.[{#AP_NAME}]</key>
+                            <delay>0</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>dB</units>
+                            <preprocessing>
+                                <step>
+                                    <type>JAVASCRIPT</type>
+                                    <parameters>
+                                        <parameter>data=value.split('\n')
+var channel=null
+var result=null
+for (i=0;i&lt;data.length;i++){
+ items=data[i].split(' ')
+ if (items[0]=='.1.3.6.1.4.1.14179.2.2.2.1.4.{#SNMPINDEX}.0'){
+  channel=items[3]
+  break
+ }
+}
+for (i=0;i&lt;data.length;i++){
+ items=data[i].split(' ')
+ if (items[0]=='.1.3.6.1.4.1.14179.2.2.15.1.21.{#SNMPINDEX}.0.'+channel){
+  result=items[3]
+  break
+ }
+}
+return result</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>dot11Chan.walk.[{#AP_NAME}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Radio Resource</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>0da7fdf44ad34d52ba01626c87b299ec</uuid>
+                                    <expression>min(/Template Cisco LAP/dot11ChanNoise2G.[{#AP_NAME}],300s)&gt;-80</expression>
+                                    <name>AP Noise on Channel 2.4GHz is High</name>
+                                    <priority>WARNING</priority>
+                                    <dependencies>
+                                        <dependency>
+                                            <name>AP Load Channel 2.4GHz Utilization High</name>
+                                            <expression>min(/Template Cisco LAP/dot11LoadChanUtil24[{#AP_NAME}],600s)&gt;80</expression>
+                                        </dependency>
+                                    </dependencies>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>d7e94ede7eb14ec5a40c451b131bf41d</uuid>
+                            <name>AP Noise Power 5GHz</name>
+                            <type>DEPENDENT</type>
+                            <key>dot11ChanNoise5G.[{#AP_NAME}]</key>
+                            <delay>0</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>dB</units>
+                            <preprocessing>
+                                <step>
+                                    <type>JAVASCRIPT</type>
+                                    <parameters>
+                                        <parameter>data=value.split('\n')
+var channel=null
+var result=null
+for (i=0;i&lt;data.length;i++){
+ items=data[i].split(' ')
+ if (items[0]=='.1.3.6.1.4.1.14179.2.2.2.1.4.{#SNMPINDEX}.1'){
+  channel=items[3]
+  break
+ }
+}
+for (i=0;i&lt;data.length;i++){
+ items=data[i].split(' ')
+ if (items[0]=='.1.3.6.1.4.1.14179.2.2.15.1.21.{#SNMPINDEX}.1.'+channel){
+  result=items[3]
+  break
+ }
+}
+return result</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>dot11Chan.walk.[{#AP_NAME}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Radio Resource</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>523fb7031ba340c7b6f061c221549126</uuid>
+                                    <expression>min(/Template Cisco LAP/dot11ChanNoise5G.[{#AP_NAME}],300s)&gt;-80</expression>
+                                    <name>AP Noise on Channel 5GHz is High</name>
+                                    <priority>WARNING</priority>
+                                    <dependencies>
+                                        <dependency>
+                                            <name>AP Load Channel 2.4GHz Utilization High</name>
+                                            <expression>min(/Template Cisco LAP/dot11LoadChanUtil24[{#AP_NAME}],600s)&gt;80</expression>
+                                        </dependency>
+                                    </dependencies>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>e02ac20ff2b24508915501d2d456db32</uuid>
+                            <name>AP Load Channel Utilization 5GHz</name>
+                            <type>DEPENDENT</type>
+                            <key>dot11LoadChanUtil5[{#AP_NAME}]</key>
+                            <delay>0</delay>
+                            <units>%</units>
+                            <preprocessing>
+                                <step>
+                                    <type>SNMP_WALK_VALUE</type>
+                                    <parameters>
+                                        <parameter>.1.3.6.1.4.1.14179.2.2.13.1.3.{#SNMPINDEX}.1</parameter>
+                                        <parameter>0</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>dot11Chan.walk.[{#AP_NAME}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Radio Resource</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>57b000d063b743ecbd58c1a55a9bdc3a</uuid>
+                                    <expression>min(/Template Cisco LAP/dot11LoadChanUtil5[{#AP_NAME}],600s)&gt;80</expression>
                                     <name>AP Load Channel 5GHz Utilization High</name>
                                     <priority>AVERAGE</priority>
                                 </trigger_prototype>
                             </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>7751438f0dc54038b3f9cc760a1ffa74</uuid>
                             <name>AP Load Channel Utilization 2.4GHz</name>
-                            <type>SNMPV2</type>
-                            <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                            <snmp_oid>AIRESPACE-WIRELESS-MIB::bsnAPIfLoadChannelUtilization.{#SNMPINDEX}.0</snmp_oid>
+                            <type>DEPENDENT</type>
                             <key>dot11LoadChanUtil24[{#AP_NAME}]</key>
-                            <delay>2m</delay>
+                            <delay>0</delay>
                             <units>%</units>
-                            <port>161</port>
-                            <applications>
-                                <application>
-                                    <name>Radio Resource</name>
-                                </application>
-                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>SNMP_WALK_VALUE</type>
+                                    <parameters>
+                                        <parameter>.1.3.6.1.4.1.14179.2.2.13.1.3.{#SNMPINDEX}.0</parameter>
+                                        <parameter>0</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>dot11Chan.walk.[{#AP_NAME}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Radio Resource</value>
+                                </tag>
+                            </tags>
                             <trigger_prototypes>
                                 <trigger_prototype>
-                                    <expression>{last(#3)}&gt;80</expression>
+                                    <uuid>409875b827ff464eb76afd9614d0c40c</uuid>
+                                    <expression>min(/Template Cisco LAP/dot11LoadChanUtil24[{#AP_NAME}],600s)&gt;80</expression>
                                     <name>AP Load Channel 2.4GHz Utilization High</name>
                                     <priority>AVERAGE</priority>
                                 </trigger_prototype>
                             </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>1458511bb35c49c680c1ca252cab89f0</uuid>
                             <name>AP Operational Status 5GHz</name>
-                            <type>SNMPV2</type>
-                            <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                            <snmp_oid>CISCO-LWAPP-AP-EXT-MIB::clExtApDot11IfOperStatus.{#SNMPINDEX}.1</snmp_oid>
+                            <type>DEPENDENT</type>
                             <key>dot11OperStatus5[{#AP_NAME}]</key>
-                            <delay>2m</delay>
-                            <port>161</port>
-                            <applications>
-                                <application>
-                                    <name>Radio Resource</name>
-                                </application>
-                            </applications>
+                            <delay>0</delay>
                             <preprocessing>
                                 <step>
+                                    <type>SNMP_WALK_VALUE</type>
+                                    <parameters>
+                                        <parameter>.1.3.6.1.4.1.9.9.9998.1.1.3.2.1.8.{#SNMPINDEX}.1</parameter>
+                                        <parameter>0</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
                                     <type>DISCARD_UNCHANGED_HEARTBEAT</type>
-                                    <params>30m</params>
+                                    <parameters>
+                                        <parameter>30m</parameter>
+                                    </parameters>
                                 </step>
                             </preprocessing>
+                            <master_item>
+                                <key>dot11Chan.walk.[{#AP_NAME}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Radio Resource</value>
+                                </tag>
+                            </tags>
                             <trigger_prototypes>
                                 <trigger_prototype>
-                                    <expression>{last()}&lt;&gt;1</expression>
+                                    <uuid>ae306a40dabe4cee9a8ee7a2437dfcfa</uuid>
+                                    <expression>last(/Template Cisco LAP/dot11OperStatus5[{#AP_NAME}])&lt;&gt;1</expression>
                                     <name>Radio Interface 5 GHz is DOWN</name>
                                     <priority>HIGH</priority>
                                     <dependencies>
                                         <dependency>
                                             <name>AP is unreachable</name>
-                                            <expression>{Template Cisco LAP:icmpping[{#AP_IPADDR}].max(300)}&lt;1</expression>
+                                            <expression>max(/Template Cisco LAP/icmpping[{#AP_IPADDR}],300s)&lt;1</expression>
                                         </dependency>
                                     </dependencies>
                                 </trigger_prototype>
                             </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>79056375570048fd9c000ea73627e52a</uuid>
                             <name>AP Operational Status 2.4GHz</name>
-                            <type>SNMPV2</type>
-                            <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                            <snmp_oid>CISCO-LWAPP-AP-EXT-MIB::clExtApDot11IfOperStatus.{#SNMPINDEX}.0</snmp_oid>
+                            <type>DEPENDENT</type>
                             <key>dot11OperStatus24[{#AP_NAME}]</key>
-                            <delay>2m</delay>
-                            <port>161</port>
-                            <applications>
-                                <application>
-                                    <name>Radio Resource</name>
-                                </application>
-                            </applications>
+                            <delay>0</delay>
                             <preprocessing>
                                 <step>
+                                    <type>SNMP_WALK_VALUE</type>
+                                    <parameters>
+                                        <parameter>.1.3.6.1.4.1.9.9.9998.1.1.3.2.1.8.{#SNMPINDEX}.0</parameter>
+                                        <parameter>0</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
                                     <type>DISCARD_UNCHANGED_HEARTBEAT</type>
-                                    <params>30m</params>
+                                    <parameters>
+                                        <parameter>30m</parameter>
+                                    </parameters>
                                 </step>
                             </preprocessing>
+                            <master_item>
+                                <key>dot11Chan.walk.[{#AP_NAME}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Radio Resource</value>
+                                </tag>
+                            </tags>
                             <trigger_prototypes>
                                 <trigger_prototype>
-                                    <expression>{last()}&lt;&gt;1</expression>
+                                    <uuid>703c5a43083c4210a469e2fd12ea7e44</uuid>
+                                    <expression>last(/Template Cisco LAP/dot11OperStatus24[{#AP_NAME}])&lt;&gt;1</expression>
                                     <name>Radio Interface 2.4 GHz is DOWN</name>
                                     <priority>HIGH</priority>
                                     <dependencies>
                                         <dependency>
                                             <name>AP is unreachable</name>
-                                            <expression>{Template Cisco LAP:icmpping[{#AP_IPADDR}].max(300)}&lt;1</expression>
+                                            <expression>max(/Template Cisco LAP/icmpping[{#AP_IPADDR}],300s)&lt;1</expression>
                                         </dependency>
                                     </dependencies>
                                 </trigger_prototype>
                             </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>1fbea842f7f64ef9acb6c60a175fe465</uuid>
                             <name>AP Receive Bytes 5GHz</name>
-                            <type>SNMPV2</type>
-                            <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                            <snmp_oid>CISCO-LWAPP-AP-EXT-MIB::clExtApDot11RadioStatsRxByteCount.{#SNMPINDEX}.1</snmp_oid>
+                            <type>DEPENDENT</type>
                             <key>dot11RXBytes5[{#AP_NAME}]</key>
-                            <delay>2m</delay>
+                            <delay>0</delay>
                             <units>bps</units>
-                            <port>161</port>
-                            <applications>
-                                <application>
-                                    <name>Radio Resource</name>
-                                </application>
-                            </applications>
                             <preprocessing>
                                 <step>
+                                    <type>SNMP_WALK_VALUE</type>
+                                    <parameters>
+                                        <parameter>.1.3.6.1.4.1.9.9.9998.1.1.3.2.1.4.{#SNMPINDEX}.1</parameter>
+                                        <parameter>0</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
                                     <type>MULTIPLIER</type>
-                                    <params>8</params>
+                                    <parameters>
+                                        <parameter>8</parameter>
+                                    </parameters>
                                 </step>
                                 <step>
                                     <type>CHANGE_PER_SECOND</type>
-                                    <params/>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
                                 </step>
                             </preprocessing>
+                            <master_item>
+                                <key>dot11Chan.walk.[{#AP_NAME}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Radio Resource</value>
+                                </tag>
+                            </tags>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>35f3a946fdf648e7a6277b0e3004dcb3</uuid>
                             <name>AP Receive Bytes 2.4GHz</name>
-                            <type>SNMPV2</type>
-                            <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                            <snmp_oid>CISCO-LWAPP-AP-EXT-MIB::clExtApDot11RadioStatsRxByteCount.{#SNMPINDEX}.0</snmp_oid>
+                            <type>DEPENDENT</type>
                             <key>dot11RXBytes24[{#AP_NAME}]</key>
-                            <delay>2m</delay>
+                            <delay>0</delay>
                             <units>bps</units>
-                            <port>161</port>
-                            <applications>
-                                <application>
-                                    <name>Radio Resource</name>
-                                </application>
-                            </applications>
                             <preprocessing>
                                 <step>
+                                    <type>SNMP_WALK_VALUE</type>
+                                    <parameters>
+                                        <parameter>.1.3.6.1.4.1.9.9.9998.1.1.3.2.1.4.{#SNMPINDEX}.0</parameter>
+                                        <parameter>0</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
                                     <type>MULTIPLIER</type>
-                                    <params>8</params>
+                                    <parameters>
+                                        <parameter>8</parameter>
+                                    </parameters>
                                 </step>
                                 <step>
                                     <type>CHANGE_PER_SECOND</type>
-                                    <params/>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
                                 </step>
                             </preprocessing>
+                            <master_item>
+                                <key>dot11Chan.walk.[{#AP_NAME}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Radio Resource</value>
+                                </tag>
+                            </tags>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>ca0cf72ee47648eeb37e63f907a3ed83</uuid>
                             <name>AP Transmit Bytes 5GHz</name>
-                            <type>SNMPV2</type>
-                            <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                            <snmp_oid>CISCO-LWAPP-AP-EXT-MIB::clExtApDot11RadioStatsTxByteCount.{#SNMPINDEX}.1</snmp_oid>
+                            <type>DEPENDENT</type>
                             <key>dot11TXBytes5[{#AP_NAME}]</key>
-                            <delay>2m</delay>
+                            <delay>0</delay>
                             <units>bps</units>
-                            <port>161</port>
-                            <applications>
-                                <application>
-                                    <name>Radio Resource</name>
-                                </application>
-                            </applications>
                             <preprocessing>
                                 <step>
+                                    <type>SNMP_WALK_VALUE</type>
+                                    <parameters>
+                                        <parameter>.1.3.6.1.4.1.9.9.9998.1.1.3.2.1.5.{#SNMPINDEX}.1</parameter>
+                                        <parameter>0</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
                                     <type>MULTIPLIER</type>
-                                    <params>8</params>
+                                    <parameters>
+                                        <parameter>8</parameter>
+                                    </parameters>
                                 </step>
                                 <step>
                                     <type>CHANGE_PER_SECOND</type>
-                                    <params/>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
                                 </step>
                             </preprocessing>
+                            <master_item>
+                                <key>dot11Chan.walk.[{#AP_NAME}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Radio Resource</value>
+                                </tag>
+                            </tags>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>cc52597d650d4407ae2e4e2e331e0011</uuid>
                             <name>AP Transmit Bytes 2.4GHz</name>
-                            <type>SNMPV2</type>
-                            <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                            <snmp_oid>CISCO-LWAPP-AP-EXT-MIB::clExtApDot11RadioStatsTxByteCount.{#SNMPINDEX}.0</snmp_oid>
+                            <type>DEPENDENT</type>
                             <key>dot11TXBytes24[{#AP_NAME}]</key>
-                            <delay>2m</delay>
+                            <delay>0</delay>
                             <units>bps</units>
-                            <port>161</port>
-                            <applications>
-                                <application>
-                                    <name>Radio Resource</name>
-                                </application>
-                            </applications>
                             <preprocessing>
                                 <step>
+                                    <type>SNMP_WALK_VALUE</type>
+                                    <parameters>
+                                        <parameter>.1.3.6.1.4.1.9.9.9998.1.1.3.2.1.5.{#SNMPINDEX}.0</parameter>
+                                        <parameter>0</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
                                     <type>MULTIPLIER</type>
-                                    <params>8</params>
+                                    <parameters>
+                                        <parameter>8</parameter>
+                                    </parameters>
                                 </step>
                                 <step>
                                     <type>CHANGE_PER_SECOND</type>
-                                    <params/>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
                                 </step>
                             </preprocessing>
+                            <master_item>
+                                <key>dot11Chan.walk.[{#AP_NAME}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Radio Resource</value>
+                                </tag>
+                            </tags>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>ddc346efea524985831461d632365620</uuid>
                             <name>AP Ping</name>
                             <type>SIMPLE</type>
                             <key>icmpping[{#AP_IPADDR}]</key>
                             <delay>2m</delay>
-                            <applications>
-                                <application>
-                                    <name>Availability</name>
-                                </application>
-                            </applications>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Availability</value>
+                                </tag>
+                            </tags>
                             <trigger_prototypes>
                                 <trigger_prototype>
-                                    <expression>{max(300)}&lt;1</expression>
+                                    <uuid>24ebf29e82b040cf92686c045e15f2d1</uuid>
+                                    <expression>max(/Template Cisco LAP/icmpping[{#AP_IPADDR}],300s)&lt;1</expression>
                                     <name>AP is unreachable</name>
                                     <priority>HIGH</priority>
                                     <manual_close>YES</manual_close>
@@ -486,30 +817,76 @@
                             </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>c521459759884054bca2d035d90adde4</uuid>
                             <name>AP Memory Usage</name>
-                            <type>SNMPV2</type>
-                            <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                            <snmp_oid>CISCO-LWAPP-AP-MIB::cLApMemoryCurrentUsage.{#SNMPINDEX}</snmp_oid>
+                            <type>DEPENDENT</type>
                             <key>MemoryUsage[{#AP_NAME}]</key>
-                            <delay>2m</delay>
+                            <delay>0</delay>
                             <units>%</units>
-                            <port>161</port>
-                            <applications>
-                                <application>
-                                    <name>Resources</name>
-                                </application>
-                            </applications>
+                            <preprocessing>
+                                <step>
+                                    <type>SNMP_WALK_VALUE</type>
+                                    <parameters>
+                                        <parameter>.1.3.6.1.4.1.9.9.513.1.1.1.1.55.{#SNMPINDEX}</parameter>
+                                        <parameter>0</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <parameters>
+                                        <parameter>30m</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>PhyRes.walk.[{#AP_NAME}]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Resources</value>
+                                </tag>
+                            </tags>
                             <trigger_prototypes>
                                 <trigger_prototype>
-                                    <expression>{last(#3)}&gt;85</expression>
+                                    <uuid>57eb862a6e4545378b9e432942304d53</uuid>
+                                    <expression>avg(/Template Cisco LAP/MemoryUsage[{#AP_NAME}],#3)&gt;85</expression>
                                     <name>AP Memory HIGH</name>
                                     <priority>AVERAGE</priority>
                                 </trigger_prototype>
                             </trigger_prototypes>
                         </item_prototype>
+                        <item_prototype>
+                            <uuid>fefbfd49b53949c89d3fce522e114654</uuid>
+                            <name>AP Hw Resources (Master)</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>walk[.1.3.6.1.4.1.9.9.513.1.1.1.1.57.{#SNMPINDEX}, .1.3.6.1.4.1.9.9.513.1.1.1.1.7.{#SNMPINDEX}, .1.3.6.1.4.1.9.9.513.1.1.1.1.55.{#SNMPINDEX}]</snmp_oid>
+                            <key>PhyRes.walk.[{#AP_NAME}]</key>
+                            <delay>2m</delay>
+                            <value_type>TEXT</value_type>
+                            <trends>0</trends>
+                            <description>AP Cpu Current Usage
+CISCO-LWAPP-AP-MIB::cLApCpuCurrentUsage.{#SNMPINDEX},
+
+UpTime
+CISCO-LWAPP-AP-MIB::cLLwappUpTime.{#SNMPINDEX},
+
+AP Memory Current Usage
+CISCO-LWAPP-AP-MIB::cLApMemoryCurrentUsage.{#SNMPINDEX}</description>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Hardware Resource</value>
+                                </tag>
+                                <tag>
+                                    <tag>Master Item</tag>
+                                </tag>
+                            </tags>
+                        </item_prototype>
                     </item_prototypes>
                     <graph_prototypes>
                         <graph_prototype>
+                            <uuid>0c348f85fd464bd6b0c1b7e379b4ca20</uuid>
                             <name>{#AP_NAME} Associated Clients</name>
                             <graph_items>
                                 <graph_item>
@@ -523,6 +900,7 @@
                             </graph_items>
                         </graph_prototype>
                         <graph_prototype>
+                            <uuid>7fbab3c4f7074c699ff5404889f26392</uuid>
                             <name>{#AP_NAME} CPU Usage</name>
                             <graph_items>
                                 <graph_item>
@@ -536,6 +914,7 @@
                             </graph_items>
                         </graph_prototype>
                         <graph_prototype>
+                            <uuid>44b34148cd2148e786c1c5781bff0860</uuid>
                             <name>{#AP_NAME} Load Channel Utilization</name>
                             <graph_items>
                                 <graph_item>
@@ -561,21 +940,13 @@
                                     <yaxisside>RIGHT</yaxisside>
                                     <item>
                                         <host>Template Cisco LAP</host>
-                                        <key>ap_chan_param.py[&quot;{HOST.CONN}&quot;,&quot;{#SNMPINDEX}&quot;,&quot;InterferenceUtil24&quot;,&quot;{$SNMP_COMMUNITY}&quot;]</key>
-                                    </item>
-                                </graph_item>
-                                <graph_item>
-                                    <sortorder>3</sortorder>
-                                    <color>CC6600</color>
-                                    <yaxisside>RIGHT</yaxisside>
-                                    <item>
-                                        <host>Template Cisco LAP</host>
-                                        <key>ap_chan_param.py[&quot;{HOST.CONN}&quot;,&quot;{#SNMPINDEX}&quot;,&quot;InterferenceUtil5&quot;,&quot;{$SNMP_COMMUNITY}&quot;]</key>
+                                        <key>dot11ChanInterference2G.[{#AP_NAME}]</key>
                                     </item>
                                 </graph_item>
                             </graph_items>
                         </graph_prototype>
                         <graph_prototype>
+                            <uuid>8cbf4fd742eb4be1b0b7f61b44336b39</uuid>
                             <name>{#AP_NAME} Memory Usage</name>
                             <graph_items>
                                 <graph_item>
@@ -589,6 +960,7 @@
                             </graph_items>
                         </graph_prototype>
                         <graph_prototype>
+                            <uuid>2ca6877f7cf24a06a7d5d3a7d583aefb</uuid>
                             <name>{#AP_NAME} Noise Power</name>
                             <graph_items>
                                 <graph_item>
@@ -596,7 +968,7 @@
                                     <yaxisside>RIGHT</yaxisside>
                                     <item>
                                         <host>Template Cisco LAP</host>
-                                        <key>ap_chan_param.py[&quot;{HOST.CONN}&quot;,&quot;{#SNMPINDEX}&quot;,&quot;NoisePower24&quot;,&quot;{$SNMP_COMMUNITY}&quot;]</key>
+                                        <key>dot11ChanNoise2G.[{#AP_NAME}]</key>
                                     </item>
                                 </graph_item>
                                 <graph_item>
@@ -605,12 +977,13 @@
                                     <yaxisside>RIGHT</yaxisside>
                                     <item>
                                         <host>Template Cisco LAP</host>
-                                        <key>ap_chan_param.py[&quot;{HOST.CONN}&quot;,&quot;{#SNMPINDEX}&quot;,&quot;NoisePower5&quot;,&quot;{$SNMP_COMMUNITY}&quot;]</key>
+                                        <key>dot11ChanNoise5G.[{#AP_NAME}]</key>
                                     </item>
                                 </graph_item>
                             </graph_items>
                         </graph_prototype>
                         <graph_prototype>
+                            <uuid>c05a0e89fb554d11821c08fd7fe00059</uuid>
                             <name>{#AP_NAME} Traffic on Radio Modules</name>
                             <graph_items>
                                 <graph_item>
@@ -653,6 +1026,20 @@
                     </graph_prototypes>
                 </discovery_rule>
             </discovery_rules>
+            <tags>
+                <tag>
+                    <tag>class</tag>
+                    <value>WiFi</value>
+                </tag>
+                <tag>
+                    <tag>role</tag>
+                    <value>AP</value>
+                </tag>
+                <tag>
+                    <tag>vendor</tag>
+                    <value>cisco</value>
+                </tag>
+            </tags>
         </template>
     </templates>
 </zabbix_export>

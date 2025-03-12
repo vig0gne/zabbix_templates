@@ -1,57 +1,356 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
-    <version>4.4</version>
-    <date>2022-06-17T11:25:42Z</date>
-    <groups>
-        <group>
-            <name>Cisco LAP</name>
-        </group>
-        <group>
-            <name>Templates</name>
-        </group>
-    </groups>
+    <version>7.0</version>
+    <template_groups>
+        <template_group>
+            <uuid>36bff6c29af64692839d077febfc7079</uuid>
+            <name>Templates/Network devices</name>
+        </template_group>
+    </template_groups>
+    <host_groups>
+        <host_group>
+            <uuid>8e0a841b82d94e69b051976179edb039</uuid>
+            <name>Network devices</name>
+        </host_group>
+    </host_groups>
     <templates>
         <template>
+            <uuid>1e7c65ca70e643e6b2607422324490cc</uuid>
             <template>Template Cisco WLC</template>
             <name>Template Cisco WLC</name>
             <groups>
                 <group>
-                    <name>Templates</name>
+                    <name>Templates/Network devices</name>
                 </group>
             </groups>
+            <items>
+                <item>
+                    <uuid>34618b40cc904b6f97f92fd12bc645b7</uuid>
+                    <name>WLC CPUs Usage</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>get[1.3.6.1.4.1.14179.1.1.5.1.0]</snmp_oid>
+                    <key>agentCurrentCPUUtilization</key>
+                    <delay>2m</delay>
+                    <history>90d</history>
+                    <units>%</units>
+                    <description>CPU Usage
+AIRESPACE-SWITCHING-MIB::agentCurrentCPUUtilization.0</description>
+                </item>
+                <item>
+                    <uuid>84bebda8fe1044129073ba0681404788</uuid>
+                    <name>WLC RAM Usage</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>get[.1.3.6.1.4.1.9.9.618.1.8.6.0]</snmp_oid>
+                    <key>agentFreeMemory</key>
+                    <delay>2m</delay>
+                    <history>90d</history>
+                    <units>%</units>
+                    <description>RAM Usage
+CISCO-LWAPP-SYS-MIB::clsSysCurrentMemoryUsage.0</description>
+                    <triggers>
+                        <trigger>
+                            <uuid>c5712d786d1e4f4a8bd56becefa3a896</uuid>
+                            <expression>last(/Template Cisco WLC/agentFreeMemory)&gt;90</expression>
+                            <name>{HOST.NAME} Memory usage very high</name>
+                            <priority>AVERAGE</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>0b53ca7f8d274b6b9211567c06612f81</uuid>
+                    <name>Fan State</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>get[.1.3.6.1.4.1.9.9.13.1.4.1.3.1]</snmp_oid>
+                    <key>env.fan.state</key>
+                    <delay>2m</delay>
+                    <history>90d</history>
+                    <description>Fan State
+CISCO-ENVMON-MIB::ciscoEnvMonFanState.1</description>
+                    <triggers>
+                        <trigger>
+                            <uuid>6215f152afec402e840e25c489e122d1</uuid>
+                            <expression>last(/Template Cisco WLC/env.fan.state)&lt;&gt;1</expression>
+                            <name>{HOST.NAME} Fan Status</name>
+                            <priority>AVERAGE</priority>
+                            <description>Fan state is not OK</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>0d2805741ef247e9afdd3f1a0d1f29d0</uuid>
+                    <name>Temperature</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>get[.1.3.6.1.4.1.14179.2.3.1.13.0]</snmp_oid>
+                    <key>env.temp</key>
+                    <delay>2m</delay>
+                    <history>90d</history>
+                    <units>°C</units>
+                    <description>Temperature
+AIRESPACE-WIRELESS-MIB::bsnSensorTemperature.0</description>
+                </item>
+                <item>
+                    <uuid>cd8449409c6746beb4dda8481b00911f</uuid>
+                    <name>ICMP_Ping</name>
+                    <type>SIMPLE</type>
+                    <key>icmpping</key>
+                    <delay>2m</delay>
+                    <history>90d</history>
+                    <valuemap>
+                        <name>Service state</name>
+                    </valuemap>
+                    <triggers>
+                        <trigger>
+                            <uuid>fbcff6bfdc2747e9bfd4c133464aebc2</uuid>
+                            <expression>max(/Template Cisco WLC/icmpping,300s)&lt;1</expression>
+                            <name>Host is unreachable</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>ba756bfff06243c786037c3fd2140fdb</uuid>
+                    <name>MAC</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>get[.1.3.6.1.4.1.14179.1.1.1.9.0]</snmp_oid>
+                    <key>system.macaddr</key>
+                    <delay>1d</delay>
+                    <history>90d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>System MAC Address
+AIRESPACE-SWITCHING-MIB::agentInventoryBurnedInMacAddress.0</description>
+                    <inventory_link>MACADDRESS_A</inventory_link>
+                </item>
+                <item>
+                    <uuid>28f5511027174ffbaeb779f160dc3eca</uuid>
+                    <name>Model</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>get[.1.3.6.1.2.1.47.1.1.1.1.13.1]</snmp_oid>
+                    <key>system.model</key>
+                    <delay>1d</delay>
+                    <history>90d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>Model name
+ENTITY-MIB::entPhysicalModelName.1</description>
+                    <inventory_link>MODEL</inventory_link>
+                </item>
+                <item>
+                    <uuid>0cbba22ae8d44b709bd66b2f4d1969a2</uuid>
+                    <name>TypeOfProduct</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>get[.1.3.6.1.2.1.47.1.1.1.1.2.1]</snmp_oid>
+                    <key>system.product</key>
+                    <delay>1d</delay>
+                    <history>90d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>Full Type of Product
+ENTITY-MIB::entPhysicalDescr.1</description>
+                    <inventory_link>TYPE_FULL</inventory_link>
+                </item>
+                <item>
+                    <uuid>150a4a5afaac47ddaa49454a7b2391e6</uuid>
+                    <name>Serial number</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>get[.1.3.6.1.2.1.47.1.1.1.1.11.1]</snmp_oid>
+                    <key>system.serial</key>
+                    <delay>1d</delay>
+                    <history>90d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>Serial number
+ENTITY-MIB::entPhysicalSerialNum.1</description>
+                    <inventory_link>SERIALNO_A</inventory_link>
+                </item>
+                <item>
+                    <uuid>d185818b50724e2e9d0006cb5168c5e8</uuid>
+                    <name>Software version</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>get[.1.3.6.1.4.1.14179.1.1.1.14.0]</snmp_oid>
+                    <key>system.software</key>
+                    <delay>1d</delay>
+                    <history>90d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>System Software Version
+AIRESPACE-SWITCHING-MIB::agentInventoryProductVersion.0</description>
+                    <inventory_link>SOFTWARE</inventory_link>
+                </item>
+                <item>
+                    <uuid>4af38afee3bb4ff88a5520cd35513401</uuid>
+                    <name>Vendor</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>get[.1.3.6.1.4.1.14179.1.1.1.12.0]</snmp_oid>
+                    <key>system.vendor</key>
+                    <delay>1d</delay>
+                    <history>90d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>AIRESPACE-SWITCHING-MIB::agentInventoryManufacturerName.0</description>
+                    <inventory_link>VENDOR</inventory_link>
+                </item>
+            </items>
             <discovery_rules>
                 <discovery_rule>
+                    <uuid>2b3e8d887d3942db88e2b4f32b2a1180</uuid>
                     <name>AP Discovery</name>
-                    <type>SNMPV2</type>
-                    <snmp_community>{$SNMP_COMMUNITY}</snmp_community>
-                    <snmp_oid>discovery[{#AP_NAME},bsnAPName,{#AP_GROUP},bsnAPGroupVlanName]</snmp_oid>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>walk[.1.3.6.1.4.1.14179.2.2.1.1.3,.1.3.6.1.4.1.14179.2.2.1.1.30]</snmp_oid>
                     <key>bsnAPName</key>
                     <delay>1h</delay>
+                    <filter>
+                        <conditions>
+                            <condition>
+                                <macro>{#AP_NAME}</macro>
+                                <value>^\w{2}-.+$</value>
+                                <formulaid>A</formulaid>
+                            </condition>
+                        </conditions>
+                    </filter>
+                    <lifetime>30d</lifetime>
+                    <enabled_lifetime_type>DISABLE_NEVER</enabled_lifetime_type>
+                    <description>AIRESPACE-WIRELESS-MIB::bsnAPName
+AIRESPACE-WIRELESS-MIB::bsnAPGroupVlanName</description>
                     <host_prototypes>
                         <host_prototype>
+                            <uuid>ee624a6f48df43c199e3b6d147bf3b83</uuid>
                             <host>{#AP_NAME}</host>
                             <name>{#AP_NAME}</name>
                             <group_links>
                                 <group_link>
                                     <group>
-                                        <name>Cisco LAP</name>
+                                        <name>Network devices</name>
                                     </group>
                                 </group_link>
                             </group_links>
-                            <group_prototypes>
-                                <group_prototype>
-                                    <name>Cisco LAP/{#AP_GROUP}</name>
-                                </group_prototype>
-                            </group_prototypes>
                             <templates>
                                 <template>
                                     <name>Template Cisco LAP</name>
                                 </template>
                             </templates>
+                            <tags>
+                                <tag>
+                                    <tag>class</tag>
+                                    <value>WiFi</value>
+                                </tag>
+                                <tag>
+                                    <tag>flexgroup</tag>
+                                    <value>{#AP_GROUP}</value>
+                                </tag>
+                                <tag>
+                                    <tag>role</tag>
+                                    <value>AP</value>
+                                </tag>
+                                <tag>
+                                    <tag>vendor</tag>
+                                    <value>cisco</value>
+                                </tag>
+                            </tags>
                         </host_prototype>
                     </host_prototypes>
+                    <preprocessing>
+                        <step>
+                            <type>SNMP_WALK_TO_JSON</type>
+                            <parameters>
+                                <parameter>{#AP_NAME}</parameter>
+                                <parameter>.1.3.6.1.4.1.14179.2.2.1.1.3</parameter>
+                                <parameter>0</parameter>
+                                <parameter>{#AP_GROUP}</parameter>
+                                <parameter>.1.3.6.1.4.1.14179.2.2.1.1.30</parameter>
+                                <parameter>0</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
                 </discovery_rule>
             </discovery_rules>
+            <tags>
+                <tag>
+                    <tag>class</tag>
+                    <value>WiFi</value>
+                </tag>
+                <tag>
+                    <tag>devicegroup</tag>
+                    <value>network</value>
+                </tag>
+                <tag>
+                    <tag>role</tag>
+                    <value>WLC</value>
+                </tag>
+                <tag>
+                    <tag>vendor</tag>
+                    <value>cisco</value>
+                </tag>
+            </tags>
+            <valuemaps>
+                <valuemap>
+                    <uuid>54ce93c12957478db9c09f83d22073eb</uuid>
+                    <name>Service state</name>
+                    <mappings>
+                        <mapping>
+                            <value>0</value>
+                            <newvalue>Down</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>Up</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+            </valuemaps>
         </template>
     </templates>
+    <triggers>
+        <trigger>
+            <uuid>f188d0d657184c529e788c803933b0d8</uuid>
+            <expression>last(/Template Cisco WLC/env.temp)&gt;80 and find(/Template Cisco WLC/system.model,,&quot;like&quot;,&quot;AIR-AP&quot;)=0</expression>
+            <name>{HOST.NAME} Temperature very high</name>
+            <priority>AVERAGE</priority>
+            <description>Temperature very high!</description>
+        </trigger>
+    </triggers>
+    <graphs>
+        <graph>
+            <uuid>1c533d1f7d824314b26c3d74a40a625b</uuid>
+            <name>CPU Load</name>
+            <graph_items>
+                <graph_item>
+                    <color>199C0D</color>
+                    <yaxisside>RIGHT</yaxisside>
+                    <item>
+                        <host>Template Cisco WLC</host>
+                        <key>agentCurrentCPUUtilization</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>7322a98eab7b402292cf1ef205ee2d88</uuid>
+            <name>RAM Usage</name>
+            <graph_items>
+                <graph_item>
+                    <color>199C0D</color>
+                    <yaxisside>RIGHT</yaxisside>
+                    <item>
+                        <host>Template Cisco WLC</host>
+                        <key>agentFreeMemory</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>a320dcdb6b9841e38cad975f9f4d0778</uuid>
+            <name>Temperature</name>
+            <graph_items>
+                <graph_item>
+                    <color>199C0D</color>
+                    <yaxisside>RIGHT</yaxisside>
+                    <item>
+                        <host>Template Cisco WLC</host>
+                        <key>env.temp</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+    </graphs>
 </zabbix_export>
